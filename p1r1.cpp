@@ -5,69 +5,96 @@ class wallet
 {
     int id;
     string name;
-    float balance;
-
+    double balance;
 public:
-    wallet(int Id,string Name,float Balance=0)
-    {
-        id =Id;
-        name=Name;
-        balance=Balance;
-    }
 
-    void display()
+    wallet(int ID,string NAME,double BALANCE)
     {
-        cout<<"your total balance:"<<balance<<endl;
+        id=ID;
+        name=NAME;
+        balance=BALANCE;
     }
-
-    void transfer(wallet reciver,int amount)
+    void loadmoney(int money)
     {
-        if(amount<=0 || amount>balance)
+        if (money <= 0)
         {
-            cout<<"insufficient balance"<<endl;
+            cout << "Invalid Amount!\n";
+            return;
         }
-        else
-        {
-            balance=balance-amount;
-            reciver.balance+=amount;
-            cout<<"suceesfully"<<endl;
-            cout<<"reciever total amount:"<<reciver.balance<<endl;
-        }
+        balance += money;
+        cout << "Money Added Successfully!\n";
     }
-
-     void loadmoney(int amount)
+    void trasferringmoney(wallet anotheruser,int money)
     {
-        if(amount<=0)
+        if (money <= 0 || money > balance)
         {
-            cout<<"not valid"<<endl;
+            cout << "Insufficient Balance!\n";
+            return;
         }
-        else
-        {
-            balance=balance+amount;
-            cout<<"suceesfully"<<endl;
-        }
+        balance -= money;
+        anotheruser.balance += money;
+        cout << "Transfer Successful!\n";
+    }
+    void print()
+    {
+        cout << "ID: " << id
+             << " | Name: " << name
+             << " | Balance: " << balance << endl;
     }
 };
 
 int main()
 {
-    wallet  w(1,"miral",4000);
-    wallet w2(2,"maitry",7000);
-    cout<<"---intial amount of your account---"<<endl;
-    w.display();
-    cout<<endl;
-    int amount;
-    cout<<"enter amount for transfer:";
-    cin>>amount;
-    cout<<endl<<"---after transfer your final amount---"<<endl;
-    w.transfer(w2,amount);
-    w.display();
-     cout<<endl<<"enter amount for add money:";
-    cin>>amount;
-    cout<<endl;
-    cout<<"---after add money your final amount---"<<endl;
-    w.loadmoney(amount);
-    w.display();
+    wallet w[50];
+    int user=1,money;
+    cout<<"1 for create new bank account\n";
+    cout<<"2 for loadmoney\n";
+    cout<<"3 for trasfer money\n";
+    cout<<"4 for display wallet\n";
+    cout<<"0 for exit\n";
+
+    while(1)
+    {
+        int choice,id,rid;
+        string name;
+        double balance;
+        cout<<"ENTER CHOICE:";
+        cin>>choice;
+        switch(choice)
+        {
+        case 1:
+            id=user;
+            cout<<"enter name:";
+            cin>>name;
+            cout<<"enter balance:";
+            cin>>balance;
+            w[user]=wallet(id,name,balance);
+            user++;
+            break;
+        case 2:
+            cout<<"id:";
+            cin>>id;
+            cout<<"enter amount:";
+            cin>>money;
+            w[id].loadmoney(money);
+            break;
+        case 3:
+            cout<<"user id:";
+            cin>>id;
+            cout<<"enter reciever id:";
+            cin>>rid;
+            cout<<"enter amount:";
+            cin>>money;
+            w[id].trasferringmoney(w[rid],money);
+            break;
+        case 4:
+            cout<<"enter id:";
+            cin>>id;
+            w[id].print();
+            break;
+        case 0:
+            return 1;
+        }
+    }
     return 0;
 }
-
